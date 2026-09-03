@@ -415,7 +415,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Column: Stats Only */}
-          <div className="w-full lg:absolute lg:bottom-0 lg:right-0 flex flex-col items-center lg:items-end lg:w-auto mt-12 lg:mt-0 z-20">
+          <div className="hidden lg:flex w-full lg:absolute lg:bottom-0 lg:right-0 flex-col items-center lg:items-end lg:w-auto mt-12 lg:mt-0 z-20">
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-4 w-full max-w-md">
               <div data-hero-stat>
