@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Icon } from '@iconify/react';
+import { AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
+import { Icon } from "@iconify/react";
 import { playDingSound, playClickSound } from "../utils/sounds";
+import { gsap, useGSAP } from "../utils/gsap";
+import MagneticButton from "./MagneticButton";
 
 /* TODO: Replace with the real Unstop registration link */
 const REGISTER_URL = "https://unstop.com";
@@ -31,12 +34,19 @@ export function BlockParticles() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    type Particle = { x: number; y: number; size: number; speed: number; color: string; opacity: number };
+    type Particle = {
+      x: number;
+      y: number;
+      size: number;
+      speed: number;
+      color: string;
+      opacity: number;
+    };
     const particles: Particle[] = Array.from({ length: COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height - canvas.height,
-      size: Math.random() * 4 + 2,        // 2–6 px blocks
-      speed: Math.random() * 0.4 + 0.1,   // slow drift up
+      size: Math.random() * 4 + 2, // 2–6 px blocks
+      speed: Math.random() * 0.4 + 0.1, // slow drift up
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       opacity: Math.random() * 0.15 + 0.04,
     }));
@@ -91,13 +101,75 @@ export function BlockParticles() {
 
 /* ── Bottom CTA ("JOIN SERVER") ──────────────────────────────────── */
 export function BottomCTA() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // ── Parallax on background (handled by parent, but we do text reveal here) ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const heading = sectionRef.current?.querySelector(
+        "[data-cta-heading]"
+      ) as HTMLElement;
+      if (!heading) return;
+
+      // Split heading into words
+      const text = heading.textContent || "";
+      heading.innerHTML = text
+        .split(" ")
+        .map(
+          (word) =>
+            `<span class="split-word" style="opacity:0;transform:translateY(25px)">${word}</span>`
+        )
+        .join(" ");
+
+      gsap.to(heading.querySelectorAll(".split-word"), {
+        opacity: 1,
+        y: 0,
+        stagger: 0.06,
+        duration: 0.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: heading,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  // ── Section content stagger ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const content = sectionRef.current?.querySelector("[data-cta-content]");
+      if (!content) return;
+
+      gsap.from(content.children, {
+        opacity: 0,
+        y: 30,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: content,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="register"
       className="relative py-16 md:py-32 px-4 flex flex-col items-center justify-center text-center z-10"
       aria-label="Registration and Final Call to Action"
     >
-      <div className="max-w-2xl mx-auto relative z-10">
+      <div data-cta-content className="max-w-2xl mx-auto relative z-10">
         {/* Icon cluster */}
         <div className="flex items-center justify-center gap-3 mb-8 md:mb-10">
           {["⚔", "💎", "🎮"].map((icon) => (
@@ -112,6 +184,7 @@ export function BottomCTA() {
 
         {/* Heading */}
         <h2
+          data-cta-heading
           className="font-pixel text-2xl sm:text-3xl md:text-4xl text-white mb-4 md:mb-6 leading-relaxed md:leading-loose drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
         >
           READY TO BEGIN YOUR JOURNEY?
@@ -120,31 +193,34 @@ export function BottomCTA() {
           Gather your team. Choose your domain. Build something impactful.
         </p>
         <p className="font-sans text-sm text-gray-500 mb-12">
-          Event begins: <span className="text-gray-400">September 20, 2026</span>
+          Event begins:{" "}
+          <span className="text-gray-400">September 20, 2026</span>
         </p>
 
         {/* CTA button (glassmorphic style) */}
-        <a
-          href={REGISTER_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative inline-flex items-center justify-center px-10 py-5 sm:px-12 sm:py-6 font-pixel text-sm tracking-widest text-white transition-all duration-300"
-          style={{
-            background: "rgba(220, 38, 38, 0.9)",
-            boxShadow: "0 0 20px rgba(220, 38, 38, 0.4)",
-          }}
-          aria-label="Register for Prarambha on Unstop"
-          onClick={playClickSound}
-        >
-          {/* Glowing background */}
-          <div className="absolute inset-0 bg-blue-600/80 rounded-lg blur-md group-hover:bg-blue-500 transition-colors duration-300 opacity-70 group-hover:opacity-100"></div>
-          {/* Main button body */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-blue-700 rounded-lg border border-blue-400/50"></div>
+        <MagneticButton strength={0.3}>
+          <a
+            href={REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex items-center justify-center px-10 py-5 sm:px-12 sm:py-6 font-pixel text-sm tracking-widest text-white transition-all duration-300"
+            style={{
+              background: "rgba(220, 38, 38, 0.9)",
+              boxShadow: "0 0 20px rgba(220, 38, 38, 0.4)",
+            }}
+            aria-label="Register for Prarambha on Unstop"
+            onClick={playClickSound}
+          >
+            {/* Glowing background */}
+            <div className="absolute inset-0 bg-blue-600/80 rounded-lg blur-md group-hover:bg-blue-500 transition-colors duration-300 opacity-70 group-hover:opacity-100"></div>
+            {/* Main button body */}
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-blue-700 rounded-lg border border-blue-400/50"></div>
 
-          <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-            ▶ &nbsp;REGISTER NOW
-          </span>
-        </a>
+            <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+              ▶ &nbsp;REGISTER NOW
+            </span>
+          </a>
+        </MagneticButton>
 
         {/* Sub-note */}
         <p className="font-sans text-xs text-gray-500 mt-8">
@@ -162,7 +238,10 @@ export function AdvancementToast() {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     const handleScroll = () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 800
+      ) {
         if (!visible && !sessionStorage.getItem("advancement_shown")) {
           setVisible(true);
           sessionStorage.setItem("advancement_shown", "true");
@@ -188,14 +267,15 @@ export function AdvancementToast() {
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
           className="fixed top-24 right-4 z-[9999] bg-[#212121] p-3 flex items-center gap-4 border-2"
           style={{
-            boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.2), inset -2px -2px 0 rgba(0,0,0,0.5)',
-            width: 'auto',
-            minWidth: '280px',
-            maxWidth: '300px',
-            borderTopColor: '#555555',
-            borderLeftColor: '#555555',
-            borderBottomColor: '#000000',
-            borderRightColor: '#000000',
+            boxShadow:
+              "inset 2px 2px 0 rgba(255,255,255,0.2), inset -2px -2px 0 rgba(0,0,0,0.5)",
+            width: "auto",
+            minWidth: "280px",
+            maxWidth: "300px",
+            borderTopColor: "#555555",
+            borderLeftColor: "#555555",
+            borderBottomColor: "#000000",
+            borderRightColor: "#000000",
           }}
         >
           <div className="w-10 h-10 flex-shrink-0 bg-[#0D0D0D] border-2 border-red-900 flex items-center justify-center text-red-500">
@@ -214,4 +294,3 @@ export function AdvancementToast() {
     </AnimatePresence>
   );
 }
-

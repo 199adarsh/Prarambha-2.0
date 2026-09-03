@@ -230,6 +230,22 @@ a, button, [role="button"], .cursor-pointer {
   display: inline-block;
 }
 
+/* ── GSAP Animation Utilities ──────────────────────────────────── */
+
+/* Initial hidden state for GSAP reveal animations */
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: transform, opacity;
+}
+
+/* Split text character/word containers */
+.split-char,
+.split-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 /* ── Accessibility ──────────────────────────────────────────────── */
 
 /* Skip-to-main link for keyboard users */

@@ -1,28 +1,96 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { playClickSound } from "../utils/sounds";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
+import { gsap, useGSAP } from "../utils/gsap";
 
 const NAV_LINKS = [
-  { label: "Home",     href: "#hero",     icon: <Icon icon="pixelarticons:home" /> },
-  { label: "Timeline", href: "#timeline", icon: <Icon icon="pixelarticons:clock" /> },
-  { label: "Rules",    href: "#rules",    icon: <Icon icon="pixelarticons:book-open" /> },
-  { label: "Prizes",   href: "#prizes",   icon: <Icon icon="pixelarticons:gift" /> },
-  { label: "Sponsors", href: "#sponsors", icon: <Icon icon="pixelarticons:heart" /> },
-  { label: "FAQ",      href: "#faq",      icon: <Icon icon="pixelarticons:message" /> },
+  {
+    label: "Home",
+    href: "#hero",
+    icon: <Icon icon="pixelarticons:home" />,
+  },
+  {
+    label: "Timeline",
+    href: "#timeline",
+    icon: <Icon icon="pixelarticons:clock" />,
+  },
+  {
+    label: "Rules",
+    href: "#rules",
+    icon: <Icon icon="pixelarticons:book-open" />,
+  },
+  {
+    label: "Prizes",
+    href: "#prizes",
+    icon: <Icon icon="pixelarticons:gift" />,
+  },
+  {
+    label: "Sponsors",
+    href: "#sponsors",
+    icon: <Icon icon="pixelarticons:heart" />,
+  },
+  {
+    label: "FAQ",
+    href: "#faq",
+    icon: <Icon icon="pixelarticons:message" />,
+  },
 ] as const;
 
 /* TODO: Replace with real registration URL */
 const REGISTER_URL = "https://unstop.com";
 
+/* ── Magnetic nav item ─────────────────────────────────────────── */
+function MagneticNavItem({
+  children,
+  className,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
+      const y = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
+      gsap.to(el, { x, y, duration: 0.3, ease: "power2.out" });
+    };
+
+    const onLeave = () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <a ref={ref} className={className} {...props}>
+      {children}
+    </a>
+  );
+}
+
 export default function Navbar() {
   const [activeHash, setActiveHash] = useState("#hero");
+  const navRef = useRef<HTMLElement>(null);
 
   // Keep track of active section for the hotbar selection
   useEffect(() => {
     const handleScroll = () => {
-      const sections = NAV_LINKS.map(link => link.href.substring(1));
+      const sections = NAV_LINKS.map((link) => link.href.substring(1));
       let current = "";
       for (const section of sections) {
         const el = document.getElementById(section);
@@ -34,28 +102,58 @@ export default function Navbar() {
         setActiveHash(current);
       }
     };
-    
+
     // Initial check
     handleScroll();
-    
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ── Smooth entrance ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const hotbar = navRef.current?.querySelector("[data-hotbar]");
+      const label = navRef.current?.querySelector("[data-hotbar-label]");
+
+      if (hotbar) {
+        gsap.from(hotbar, {
+          y: -60,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          delay: 2.5, // After hero loader finishes
+        });
+      }
+      if (label) {
+        gsap.from(label, {
+          opacity: 0,
+          duration: 0.5,
+          delay: 3.0,
+        });
+      }
+    },
+    { scope: navRef }
+  );
+
   return (
     <nav
+      ref={navRef}
       role="navigation"
       aria-label="Main navigation"
       className="fixed top-6 inset-x-0 z-50 flex flex-col items-center justify-center pointer-events-none"
     >
       {/* The Hotbar Container */}
-      <div 
-        className="flex bg-black/60 backdrop-blur-xl p-[2px] pointer-events-auto rounded-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden" 
+      <div
+        data-hotbar
+        className="flex bg-black/60 backdrop-blur-xl p-[2px] pointer-events-auto rounded-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden"
       >
         {NAV_LINKS.map((link, index) => {
           const isActive = activeHash === link.href;
           return (
-            <a
+            <MagneticNavItem
               key={link.href}
               href={link.href}
               onClick={() => {
@@ -68,23 +166,25 @@ export default function Navbar() {
               {/* Selection Box overlay */}
               {isActive && (
                 <div className="absolute inset-[-2px] border-[3px] border-white pointer-events-none z-10 box-content">
-                   <div className="absolute inset-[-3px] border-[1px] border-black pointer-events-none box-content"></div>
+                  <div className="absolute inset-[-3px] border-[1px] border-black pointer-events-none box-content"></div>
                 </div>
               )}
               {/* Icon */}
-              <span className={`text-lg md:text-xl ${isActive ? 'scale-110' : 'scale-100'} group-hover:scale-110 transition-transform duration-200 mc-text-shadow`}>
+              <span
+                className={`text-lg md:text-xl ${isActive ? "scale-110" : "scale-100"} group-hover:scale-110 transition-transform duration-200 mc-text-shadow`}
+              >
                 {link.icon}
               </span>
               {/* Hotbar Slot Number */}
               <span className="absolute bottom-[2px] right-[4px] font-pixel text-[0.55rem] text-white drop-shadow-[1px_1px_0_#000]">
                 {index + 1}
               </span>
-            </a>
+            </MagneticNavItem>
           );
         })}
 
         {/* Register Button as a wider slot */}
-        <a
+        <MagneticNavItem
           href={REGISTER_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -95,12 +195,16 @@ export default function Navbar() {
           <span className="font-pixel text-[0.5rem] md:text-[0.55rem] text-white tracking-widest group-hover:scale-105 transition-transform duration-200 drop-shadow-[1px_1px_0_#000]">
             REGISTER
           </span>
-        </a>
+        </MagneticNavItem>
       </div>
 
       {/* Active Item Label (Minecraft style below hotbar when at top) */}
-      <div className="mt-2 font-pixel text-[0.6rem] text-white tracking-widest pointer-events-auto transition-all drop-shadow-[2px_2px_0_#000]">
-        {NAV_LINKS.find(link => link.href === activeHash)?.label || "Join Server"}
+      <div
+        data-hotbar-label
+        className="mt-2 font-pixel text-[0.6rem] text-white tracking-widest pointer-events-auto transition-all drop-shadow-[2px_2px_0_#000]"
+      >
+        {NAV_LINKS.find((link) => link.href === activeHash)?.label ||
+          "Join Server"}
       </div>
     </nav>
   );

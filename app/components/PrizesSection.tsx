@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useInView, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { playDingSound } from "../utils/sounds";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
+import { gsap, useGSAP } from "../utils/gsap";
 
 /* ── Prize data ──────────────────────────────────────────────────── */
 const DOMAINS = [
@@ -57,7 +59,7 @@ const DOMAINS = [
     rank: "AGRITECH",
     amount: "GROW",
     rarity: "AGRICULTURE",
-    rarityColor: "#FCA5A5", 
+    rarityColor: "#FCA5A5",
     borderColor: "#FCA5A5",
     glowColor: "rgba(252,165,165,0.3)",
     chestImage: "/chests/chest-gold-v2.png",
@@ -75,9 +77,7 @@ const DOMAINS = [
 const SPONSOR_TIERS = [
   {
     label: "TITLE SPONSOR",
-    sponsors: [
-      { name: "DIGITALOCEAN", icon: "logos:digital-ocean" }
-    ],
+    sponsors: [{ name: "DIGITALOCEAN", icon: "logos:digital-ocean" }],
     borderColor: "#FDE047",
     labelColor: "#FDE047",
     height: "h-32",
@@ -87,7 +87,7 @@ const SPONSOR_TIERS = [
     label: "GOLD SPONSORS",
     sponsors: [
       { name: "SUPABASE", icon: "logos:supabase-icon" },
-      { name: "POSTMAN", icon: "logos:postman-icon" }
+      { name: "POSTMAN", icon: "logos:postman-icon" },
     ],
     borderColor: "#FBBF24",
     labelColor: "#FBBF24",
@@ -99,7 +99,7 @@ const SPONSOR_TIERS = [
     sponsors: [
       { name: "HASHNODE", icon: "logos:hashnode-icon" },
       { name: "VERCEL", icon: "logos:vercel-icon" },
-      { name: "DOCKER", icon: "logos:docker-icon" }
+      { name: "DOCKER", icon: "logos:docker-icon" },
     ],
     borderColor: "#9CA3AF",
     labelColor: "#9CA3AF",
@@ -112,7 +112,7 @@ const SPONSOR_TIERS = [
       { name: "FIGMA", icon: "logos:figma" },
       { name: "NOTION", icon: "logos:notion-icon" },
       { name: "TAILWIND", icon: "logos:tailwindcss-icon" },
-      { name: "REACT", icon: "logos:react" }
+      { name: "REACT", icon: "logos:react" },
     ],
     borderColor: "#EF4444", // Eerie red
     labelColor: "#EF4444",
@@ -138,8 +138,17 @@ function LootChest({
       <motion.div
         className="relative w-full h-full"
         initial={{ scale: 0.85, opacity: 0 }}
-        animate={isOpen ? { scale: 1, opacity: 1 } : { scale: 0.85, opacity: 0 }}
-        transition={{ duration: 0.5, type: "spring", stiffness: 120, damping: 14 }}
+        animate={
+          isOpen
+            ? { scale: 1, opacity: 1 }
+            : { scale: 0.85, opacity: 0 }
+        }
+        transition={{
+          duration: 0.5,
+          type: "spring",
+          stiffness: 120,
+          damping: 14,
+        }}
       >
         <motion.div
           className="relative w-full h-full"
@@ -148,7 +157,7 @@ function LootChest({
             duration: 4,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 0.2, // Start float shortly after pop-in
+            delay: 0.2,
           }}
         >
           <Image
@@ -198,21 +207,24 @@ function ThemeModal({
       exit={{ opacity: 0 }}
     >
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" 
-        onClick={onClose} 
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+        onClick={onClose}
       />
 
       {/* Modal Content */}
       <motion.div
         className="relative z-10 w-full max-w-lg bg-[#0F172A] border-2 rounded-2xl p-6 sm:p-8 overflow-hidden shadow-2xl"
-        style={{ borderColor: theme.borderColor, boxShadow: `0 0 40px ${theme.glowColor}` }}
+        style={{
+          borderColor: theme.borderColor,
+          boxShadow: `0 0 40px ${theme.glowColor}`,
+        }}
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
       >
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
         >
@@ -220,25 +232,26 @@ function ThemeModal({
         </button>
 
         <div className="flex flex-col items-center text-center">
-          <Image 
-            src={theme.chestImage} 
-            alt={theme.rank} 
-            width={80} 
-            height={80} 
+          <Image
+            src={theme.chestImage}
+            alt={theme.rank}
+            width={80}
+            height={80}
             className="mb-4"
             style={{ imageRendering: "pixelated" }}
           />
-          
-          <h3 
+
+          <h3
             className="font-pixel text-2xl md:text-3xl mb-2"
-            style={{ color: theme.rarityColor, textShadow: `0 0 10px ${theme.glowColor}` }}
+            style={{
+              color: theme.rarityColor,
+              textShadow: `0 0 10px ${theme.glowColor}`,
+            }}
           >
             {theme.rank}
           </h3>
-          
-          <p className="font-sans text-sm text-gray-300 mb-6">
-            {theme.desc}
-          </p>
+
+          <p className="font-sans text-sm text-gray-300 mb-6">{theme.desc}</p>
 
           <div className="w-full text-left">
             <h4 className="font-pixel text-xs text-gray-400 tracking-widest mb-4 border-b border-white/10 pb-2">
@@ -246,8 +259,15 @@ function ThemeModal({
             </h4>
             <ul className="space-y-3">
               {theme.problemStatements.map((statement, idx) => (
-                <li key={idx} className="flex items-start gap-3 font-sans text-sm text-gray-200">
-                  <Icon icon="pixelarticons:chevron-right" className="shrink-0 mt-0.5" style={{ color: theme.rarityColor }} />
+                <li
+                  key={idx}
+                  className="flex items-start gap-3 font-sans text-sm text-gray-200"
+                >
+                  <Icon
+                    icon="pixelarticons:chevron-right"
+                    className="shrink-0 mt-0.5"
+                    style={{ color: theme.rarityColor }}
+                  />
                   <span>{statement}</span>
                 </li>
               ))}
@@ -259,7 +279,7 @@ function ThemeModal({
   );
 }
 
-/* ── Individual prize chest card ─────────────────────────────────── */
+/* ── Individual prize chest card with 3D tilt ────────────────────── */
 function PrizeCard({
   prize,
   index,
@@ -270,22 +290,79 @@ function PrizeCard({
   onClick: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [isVisible, setIsVisible] = useState(false);
+
+  // 3D cursor tilt — desktop only
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+    };
+
+    const onLeave = () => {
+      el.style.transform = "";
+      el.style.transition = "transform 0.4s ease";
+      setTimeout(() => {
+        if (el) el.style.transition = "";
+      }, 400);
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  // GSAP scroll reveal
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setIsVisible(true);
+        return;
+      }
+      const el = ref.current;
+      if (!el) return;
+
+      gsap.from(el, {
+        opacity: 0,
+        y: 40,
+        scale: 0.9,
+        duration: 0.6,
+        delay: index * 0.12,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          toggleActions: "play none none none",
+          onEnter: () => setIsVisible(true),
+        },
+      });
+    },
+    { scope: ref }
+  );
 
   return (
-    <motion.div
+    <div
       ref={ref}
+      data-prize-card
       onClick={onClick}
       onMouseEnter={() => playDingSound()}
-      className="group relative flex flex-col items-center gap-4 p-6 rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-105"
+      className="group relative flex flex-col items-center gap-4 p-6 rounded-xl border backdrop-blur-md cursor-pointer transition-shadow duration-300"
       style={{
-        background: "rgba(17, 24, 39, 0.65)", // Foggy dark bg
+        background: "rgba(17, 24, 39, 0.65)",
         borderColor: "rgba(255, 255, 255, 0.05)",
-        boxShadow: inView ? `0 0 40px ${prize.glowColor}` : "none",
+        boxShadow: isVisible ? `0 0 40px ${prize.glowColor}` : "none",
+        willChange: "transform",
       }}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.12 }}
     >
       {/* Hover glow outline */}
       <div
@@ -296,14 +373,18 @@ function PrizeCard({
       {/* Rank label */}
       <div
         className="relative z-10 font-pixel text-xs tracking-widest px-4 py-2 border rounded-md backdrop-blur-sm"
-        style={{ color: prize.rarityColor, borderColor: `${prize.borderColor}40`, background: `${prize.borderColor}10` }}
+        style={{
+          color: prize.rarityColor,
+          borderColor: `${prize.borderColor}40`,
+          background: `${prize.borderColor}10`,
+        }}
       >
         {prize.rank}
       </div>
 
       {/* Loot chest */}
       <LootChest
-        isOpen={inView}
+        isOpen={isVisible}
         src={prize.chestImage}
         alt={`${prize.rank} loot chest`}
         glowColor={prize.glowColor}
@@ -335,7 +416,7 @@ function PrizeCard({
       <p className="relative z-10 font-sans text-xs text-gray-400 text-center">
         {prize.desc}
       </p>
-    </motion.div>
+    </div>
   );
 }
 
@@ -360,8 +441,10 @@ function SponsorSlot({
       }}
     >
       {/* Hover glow */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ boxShadow: `inset 0 0 20px ${borderColor}20` }} />
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{ boxShadow: `inset 0 0 20px ${borderColor}20` }}
+      />
 
       {/* Eerie spider eye dots */}
       <div className="absolute top-2 right-2 flex gap-1">
@@ -371,7 +454,10 @@ function SponsorSlot({
 
       {/* Sponsor Logo and Name */}
       <div className="relative z-10 flex flex-col md:flex-row items-center gap-3 group-hover:scale-110 transition-transform duration-300 pointer-events-none p-2 text-center">
-        <Icon icon={sponsor.icon} className="text-3xl md:text-5xl drop-shadow-md grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300" />
+        <Icon
+          icon={sponsor.icon}
+          className="text-3xl md:text-5xl drop-shadow-md grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+        />
         <span
           className={`font-pixel ${textSize} tracking-widest text-gray-500 group-hover:text-white transition-colors drop-shadow-md`}
         >
@@ -390,32 +476,30 @@ function SponsorTier({
   tier: (typeof SPONSOR_TIERS)[number];
   index: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
-    <motion.div
-      ref={ref}
-      className="flex flex-col gap-2"
-      initial={{ opacity: 0, x: -20 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-    >
+    <div data-sponsor-tier className="flex flex-col gap-2">
       {/* Tier label */}
       <div className="flex items-center gap-3">
         <div
           className="h-[1px] flex-1"
-          style={{ background: `linear-gradient(90deg, transparent, ${tier.borderColor}40)` }}
+          style={{
+            background: `linear-gradient(90deg, transparent, ${tier.borderColor}40)`,
+          }}
         />
         <span
           className="font-pixel text-[0.6rem] md:text-sm tracking-widest px-4"
-          style={{ color: tier.labelColor, textShadow: `0 0 8px ${tier.borderColor}40` }}
+          style={{
+            color: tier.labelColor,
+            textShadow: `0 0 8px ${tier.borderColor}40`,
+          }}
         >
           {tier.label}
         </span>
         <div
           className="h-[1px] flex-1"
-          style={{ background: `linear-gradient(-90deg, transparent, ${tier.borderColor}40)` }}
+          style={{
+            background: `linear-gradient(-90deg, transparent, ${tier.borderColor}40)`,
+          }}
         />
       </div>
 
@@ -431,7 +515,7 @@ function SponsorTier({
           />
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -452,14 +536,90 @@ function BlockSeparator({ color = "#FDE047" }: { color?: string }) {
 
 /* ── Section wrapper ─────────────────────────────────────────────── */
 export default function PrizesSection() {
-  const prizeHeaderRef = useRef<HTMLDivElement>(null);
-  const sponsorHeaderRef = useRef<HTMLDivElement>(null);
-  const prizeHeaderInView = useInView(prizeHeaderRef, { once: true });
-  const sponsorHeaderInView = useInView(sponsorHeaderRef, { once: true });
-  const [selectedTheme, setSelectedTheme] = useState<typeof DOMAINS[number] | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [selectedTheme, setSelectedTheme] = useState<
+    (typeof DOMAINS)[number] | null
+  >(null);
+
+  // ── Prize header reveal ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const header = sectionRef.current?.querySelector(
+        "[data-prizes-header]"
+      );
+      if (!header) return;
+
+      gsap.from(header.children, {
+        opacity: 0,
+        y: 25,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: header,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  // ── Sponsor header reveal ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const header = sectionRef.current?.querySelector(
+        "[data-sponsors-header]"
+      );
+      if (!header) return;
+
+      gsap.from(header.children, {
+        opacity: 0,
+        y: 25,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: header,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  // ── Sponsor tiers alternating slide ──
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const tiers = sectionRef.current?.querySelectorAll(
+        "[data-sponsor-tier]"
+      );
+      if (!tiers || tiers.length === 0) return;
+
+      tiers.forEach((tier, i) => {
+        gsap.from(tier, {
+          opacity: 0,
+          x: i % 2 === 0 ? -50 : 50,
+          duration: 0.6,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: tier,
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
+        });
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section
+      ref={sectionRef}
       className="relative py-16 md:py-24 px-4 overflow-hidden bg-[#0A0F15]"
       aria-label="Prize pool and sponsors section"
     >
@@ -478,15 +638,11 @@ export default function PrizesSection() {
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto">
-
         {/* ── DOMAINS ── */}
         <div id="prizes">
-          <motion.div
-            ref={prizeHeaderRef}
+          <div
+            data-prizes-header
             className="mb-16 flex flex-col items-center text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={prizeHeaderInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
           >
             <div className="inline-block border border-yellow-400/30 bg-yellow-400/10 backdrop-blur-md rounded-md px-3 py-1 mb-6">
               <span className="font-sans text-xs font-bold text-yellow-300 tracking-widest drop-shadow-[0_0_5px_rgba(253,224,71,0.5)]">
@@ -495,7 +651,10 @@ export default function PrizesSection() {
             </div>
 
             <div className="flex items-center gap-4 mb-4">
-              <Icon icon="pixelarticons:map" className="text-yellow-400 text-4xl drop-shadow-[0_0_10px_rgba(253,224,71,0.5)]" />
+              <Icon
+                icon="pixelarticons:map"
+                className="text-yellow-400 text-4xl drop-shadow-[0_0_10px_rgba(253,224,71,0.5)]"
+              />
               <h2
                 className="font-pixel text-4xl md:text-5xl text-yellow-400"
                 style={{ textShadow: "0 0 15px rgba(253,224,71,0.4)" }}
@@ -506,15 +665,15 @@ export default function PrizesSection() {
             <p className="font-sans text-gray-400 text-sm md:text-base max-w-lg">
               Explore the themes and choose your path for Prarambha 2.0.{" "}
             </p>
-          </motion.div>
+          </div>
 
           {/* Chest cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {DOMAINS.map((prize, i) => (
-              <PrizeCard 
-                key={prize.rank} 
-                prize={prize} 
-                index={i} 
+              <PrizeCard
+                key={prize.rank}
+                prize={prize}
+                index={i}
                 onClick={() => setSelectedTheme(prize)}
               />
             ))}
@@ -526,12 +685,9 @@ export default function PrizesSection() {
 
         {/* ── SPONSORS ── */}
         <div id="sponsors">
-          <motion.div
-            ref={sponsorHeaderRef}
+          <div
+            data-sponsors-header
             className="mb-12 flex flex-col items-center text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={sponsorHeaderInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
           >
             <div className="inline-block border border-red-500/30 bg-red-500/10 backdrop-blur-md rounded-md px-3 py-1 mb-6">
               <span className="font-sans text-xs font-bold text-red-400 tracking-widest drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]">
@@ -540,7 +696,10 @@ export default function PrizesSection() {
             </div>
 
             <div className="flex items-center gap-4 mb-4">
-              <Icon icon="pixelarticons:diamond" className="text-red-500 text-4xl drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+              <Icon
+                icon="pixelarticons:diamond"
+                className="text-red-500 text-4xl drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+              />
               <h2
                 className="font-pixel text-4xl md:text-5xl text-red-500"
                 style={{ textShadow: "0 0 15px rgba(239,68,68,0.4)" }}
@@ -549,13 +708,16 @@ export default function PrizesSection() {
               </h2>
             </div>
             <p className="font-sans text-gray-400 text-sm md:text-base max-w-lg">
-              The guilds that make this world possible. Follow the glowing eyes in the dark. Interested in
-              sponsoring?{" "}
-              <a href="mailto:dssa.dkte24@gmail.com" className="text-yellow-400 hover:text-yellow-300 underline cursor-pointer transition-colors">
+              The guilds that make this world possible. Follow the glowing eyes
+              in the dark. Interested in sponsoring?{" "}
+              <a
+                href="mailto:dssa.dkte24@gmail.com"
+                className="text-yellow-400 hover:text-yellow-300 underline cursor-pointer transition-colors"
+              >
                 Contact dssa.dkte24@gmail.com
               </a>
             </p>
-          </motion.div>
+          </div>
 
           {/* Tier hierarchy */}
           <div className="flex flex-col gap-8 max-w-4xl mx-auto">
@@ -574,9 +736,9 @@ export default function PrizesSection() {
 
       <AnimatePresence>
         {selectedTheme && (
-          <ThemeModal 
-            theme={selectedTheme} 
-            onClose={() => setSelectedTheme(null)} 
+          <ThemeModal
+            theme={selectedTheme}
+            onClose={() => setSelectedTheme(null)}
           />
         )}
       </AnimatePresence>
