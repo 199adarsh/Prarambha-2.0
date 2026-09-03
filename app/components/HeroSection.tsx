@@ -294,7 +294,7 @@ export default function HeroSection() {
       <section
         ref={sectionRef}
         id="hero"
-        className="relative h-screen w-full flex flex-col justify-center overflow-hidden"
+        className="relative h-screen w-full flex flex-col justify-start pt-32 lg:pt-0 lg:justify-center overflow-hidden"
         aria-label="Hero section"
       >
         {/* Video Background */}
@@ -318,15 +318,15 @@ export default function HeroSection() {
         {/* ── Hero content ── */}
         <div
           ref={contentRef}
-          className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-12 md:pt-24 pb-16 md:pb-32 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 md:gap-16"
+          className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pb-16 md:pb-32 flex flex-col lg:flex-row items-center lg:items-center justify-between gap-8 md:gap-16"
           style={{ opacity: loading ? 0 : undefined }}
         >
           {/* Left Column: Text & CTA */}
-          <div className="flex-1 flex flex-col items-start text-left max-w-3xl mt-8 md:mt-12 lg:mt-0 lg:-ml-4 xl:-ml-8">
+          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left max-w-3xl mt-0 lg:-ml-4 xl:-ml-8 mx-auto lg:mx-0 w-full">
             {/* Label */}
             <div
               data-hero-label
-              className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"
+              className="flex items-center justify-center lg:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6 w-full"
             >
               <span className="w-6 sm:w-8 h-[2px] bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
               <span className="font-pixel text-[0.5rem] sm:text-[0.6rem] text-gray-300 tracking-[0.4em] uppercase drop-shadow-md mc-text-shadow">
@@ -337,12 +337,12 @@ export default function HeroSection() {
             {/* Main title */}
             <h1
               ref={titleRef}
-              className="font-pixel text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-none mb-4"
+              className="font-pixel text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none mb-4"
               style={{
                 filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.8))",
               }}
             >
-              <span className="inline-block mr-4">
+              <span className="inline-block mr-2 sm:mr-4">
                 <SplitText 
                   text="Prarambha" 
                   className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500"
@@ -355,7 +355,7 @@ export default function HeroSection() {
 
             <p
               data-hero-desc
-              className="font-sans text-sm sm:text-base md:text-lg text-gray-300 mb-8 sm:mb-10 font-medium leading-relaxed max-w-2xl"
+              className="font-sans text-sm sm:text-base md:text-lg text-gray-300 mb-8 sm:mb-10 font-medium leading-relaxed max-w-2xl px-4 lg:px-0"
               style={{ textShadow: "0 2px 6px rgba(0,0,0,0.9)" }}
             >
               Immerse yourself in a 24-hour hackathon. Solve real-world
@@ -364,7 +364,7 @@ export default function HeroSection() {
             </p>
 
             {/* CTA */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 mt-3 w-full">
               <div data-hero-cta>
                 <MagneticButton strength={0.25}>
                   <a
