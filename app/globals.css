@@ -15,8 +15,8 @@
   --color-block-border:  #2A2A2A;
 
   /* ── Typography ───────────────────────────────────── */
-  --font-pixel: var(--font-pixel-var), 'Courier New', monospace;
-  --font-sans:  var(--font-jabris-var), ui-sans-serif, system-ui;
+  --font-pixel: var(--font-geist-pixel-square), 'Courier New', monospace;
+  --font-sans:  var(--font-geist-sans), ui-sans-serif, system-ui;
 }
 
 /* ── Base reset ─────────────────────────────────────── */

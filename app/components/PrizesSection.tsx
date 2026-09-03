@@ -1,42 +1,72 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { motion, useInView } from "motion/react";
+import { motion, useInView, AnimatePresence } from "motion/react";
 import { playDingSound } from "../utils/sounds";
 import { Icon } from '@iconify/react';
 
 /* ── Prize data ──────────────────────────────────────────────────── */
-const PRIZES = [
+const DOMAINS = [
   {
-    rank: "1ST PLACE",
-    amount: "₹1,25,000",
-    rarity: "LEGENDARY",
-    rarityColor: "#FDE047", // Flashlight yellow
+    rank: "HEALTHCARE",
+    amount: "HEAL",
+    rarity: "WELLNESS",
+    rarityColor: "#FDE047",
     borderColor: "#FDE047",
     glowColor: "rgba(253,224,71,0.4)",
     chestImage: "/chests/chest-gold-v2.png",
-    desc: "Ultimate Winner Rewards",
+    desc: "Innovate health-tech solutions",
+    problemStatements: [
+      "AI-driven early disease prediction",
+      "Remote patient monitoring systems",
+      "Smart hospital resource management",
+    ],
   },
   {
-    rank: "2ND PLACE",
-    amount: "₹75,000",
-    rarity: "RARE",
-    rarityColor: "#93C5FD", // Misty blue
+    rank: "AGENTIC AI",
+    amount: "AI",
+    rarity: "INTELLIGENCE",
+    rarityColor: "#93C5FD",
     borderColor: "#93C5FD",
     glowColor: "rgba(147,197,253,0.3)",
     chestImage: "/chests/chest-cyan-v2.png",
-    desc: "Runner-up Distinction",
+    desc: "Build autonomous AI agents",
+    problemStatements: [
+      "Autonomous coding and debugging assistants",
+      "Automated multi-step customer support agents",
+      "AI agents for automated data analysis and reporting",
+    ],
   },
   {
-    rank: "3RD PLACE",
-    amount: "₹50,000",
-    rarity: "UNCOMMON",
-    rarityColor: "#86EFAC", // Swamp green
+    rank: "EDUTECH",
+    amount: "LEARN",
+    rarity: "EDUCATION",
+    rarityColor: "#86EFAC",
     borderColor: "#86EFAC",
     glowColor: "rgba(134,239,172,0.3)",
     chestImage: "/chests/chest-green-v2.png",
-    desc: "Bronze Tier Achievement",
+    desc: "Revolutionize learning experiences",
+    problemStatements: [
+      "Personalized AI learning paths",
+      "Gamified virtual classrooms",
+      "Automated assessment and feedback tools",
+    ],
+  },
+  {
+    rank: "AGRITECH",
+    amount: "GROW",
+    rarity: "AGRICULTURE",
+    rarityColor: "#FCA5A5", 
+    borderColor: "#FCA5A5",
+    glowColor: "rgba(252,165,165,0.3)",
+    chestImage: "/chests/chest-gold-v2.png",
+    desc: "Empower agriculture through tech",
+    problemStatements: [
+      "IoT-based smart irrigation systems",
+      "Crop disease prediction models",
+      "Supply chain optimization for farmers",
+    ],
   },
 ] as const;
 
@@ -150,13 +180,94 @@ function LootChest({
   );
 }
 
+/* ── Theme Modal ─────────────────────────────────────────────────── */
+function ThemeModal({
+  theme,
+  onClose,
+}: {
+  theme: (typeof DOMAINS)[number] | null;
+  onClose: () => void;
+}) {
+  if (!theme) return null;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" 
+        onClick={onClose} 
+      />
+
+      {/* Modal Content */}
+      <motion.div
+        className="relative z-10 w-full max-w-lg bg-[#0F172A] border-2 rounded-2xl p-6 sm:p-8 overflow-hidden shadow-2xl"
+        style={{ borderColor: theme.borderColor, boxShadow: `0 0 40px ${theme.glowColor}` }}
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        transition={{ type: "spring", damping: 20, stiffness: 300 }}
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+        >
+          <Icon icon="pixelarticons:close" className="w-6 h-6" />
+        </button>
+
+        <div className="flex flex-col items-center text-center">
+          <Image 
+            src={theme.chestImage} 
+            alt={theme.rank} 
+            width={80} 
+            height={80} 
+            className="mb-4"
+            style={{ imageRendering: "pixelated" }}
+          />
+          
+          <h3 
+            className="font-pixel text-2xl md:text-3xl mb-2"
+            style={{ color: theme.rarityColor, textShadow: `0 0 10px ${theme.glowColor}` }}
+          >
+            {theme.rank}
+          </h3>
+          
+          <p className="font-sans text-sm text-gray-300 mb-6">
+            {theme.desc}
+          </p>
+
+          <div className="w-full text-left">
+            <h4 className="font-pixel text-xs text-gray-400 tracking-widest mb-4 border-b border-white/10 pb-2">
+              PROBLEM STATEMENTS
+            </h4>
+            <ul className="space-y-3">
+              {theme.problemStatements.map((statement, idx) => (
+                <li key={idx} className="flex items-start gap-3 font-sans text-sm text-gray-200">
+                  <Icon icon="pixelarticons:chevron-right" className="shrink-0 mt-0.5" style={{ color: theme.rarityColor }} />
+                  <span>{statement}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ── Individual prize chest card ─────────────────────────────────── */
 function PrizeCard({
   prize,
   index,
+  onClick,
 }: {
-  prize: (typeof PRIZES)[number];
+  prize: (typeof DOMAINS)[number];
   index: number;
+  onClick: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -164,8 +275,9 @@ function PrizeCard({
   return (
     <motion.div
       ref={ref}
+      onClick={onClick}
       onMouseEnter={() => playDingSound()}
-      className="group relative flex flex-col items-center gap-4 p-6 rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-300"
+      className="group relative flex flex-col items-center gap-4 p-6 rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-105"
       style={{
         background: "rgba(17, 24, 39, 0.65)", // Foggy dark bg
         borderColor: "rgba(255, 255, 255, 0.05)",
@@ -176,7 +288,7 @@ function PrizeCard({
       transition={{ duration: 0.5, delay: index * 0.12 }}
     >
       {/* Hover glow outline */}
-      <div 
+      <div
         className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{ border: `1px solid ${prize.borderColor}` }}
       />
@@ -249,7 +361,7 @@ function SponsorSlot({
     >
       {/* Hover glow */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-           style={{ boxShadow: `inset 0 0 20px ${borderColor}20` }} />
+        style={{ boxShadow: `inset 0 0 20px ${borderColor}20` }} />
 
       {/* Eerie spider eye dots */}
       <div className="absolute top-2 right-2 flex gap-1">
@@ -344,10 +456,11 @@ export default function PrizesSection() {
   const sponsorHeaderRef = useRef<HTMLDivElement>(null);
   const prizeHeaderInView = useInView(prizeHeaderRef, { once: true });
   const sponsorHeaderInView = useInView(sponsorHeaderRef, { once: true });
+  const [selectedTheme, setSelectedTheme] = useState<typeof DOMAINS[number] | null>(null);
 
   return (
     <section
-      className="relative py-24 px-4 overflow-hidden bg-[#0A0F15]"
+      className="relative py-16 md:py-24 px-4 overflow-hidden bg-[#0A0F15]"
       aria-label="Prize pool and sponsors section"
     >
       {/* Spooky Fog Background */}
@@ -366,7 +479,7 @@ export default function PrizesSection() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto">
 
-        {/* ── PRIZE POOL ── */}
+        {/* ── DOMAINS ── */}
         <div id="prizes">
           <motion.div
             ref={prizeHeaderRef}
@@ -380,27 +493,30 @@ export default function PrizesSection() {
                 CHAPTER 04A
               </span>
             </div>
-            
+
             <div className="flex items-center gap-4 mb-4">
-              <Icon icon="pixelarticons:gift" className="text-yellow-400 text-4xl drop-shadow-[0_0_10px_rgba(253,224,71,0.5)]" />
+              <Icon icon="pixelarticons:map" className="text-yellow-400 text-4xl drop-shadow-[0_0_10px_rgba(253,224,71,0.5)]" />
               <h2
                 className="font-pixel text-4xl md:text-5xl text-yellow-400"
                 style={{ textShadow: "0 0 15px rgba(253,224,71,0.4)" }}
               >
-                PRIZE POOL
+                THEMES
               </h2>
             </div>
             <p className="font-sans text-gray-400 text-sm md:text-base max-w-lg">
-              Legendary loot awaits the top crafters in the fog. Open the chests to
-              reveal your rewards.{" "}
-              <span className="text-gray-500 text-xs block mt-1">Total Prize Pool: ₹2,50,000</span>
+              Explore the themes and choose your path for Prarambha 2.0.{" "}
             </p>
           </motion.div>
 
           {/* Chest cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {PRIZES.map((prize, i) => (
-              <PrizeCard key={prize.rank} prize={prize} index={i} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {DOMAINS.map((prize, i) => (
+              <PrizeCard 
+                key={prize.rank} 
+                prize={prize} 
+                index={i} 
+                onClick={() => setSelectedTheme(prize)}
+              />
             ))}
           </div>
         </div>
@@ -422,7 +538,7 @@ export default function PrizesSection() {
                 CHAPTER 04B
               </span>
             </div>
-            
+
             <div className="flex items-center gap-4 mb-4">
               <Icon icon="pixelarticons:diamond" className="text-red-500 text-4xl drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
               <h2
@@ -435,8 +551,8 @@ export default function PrizesSection() {
             <p className="font-sans text-gray-400 text-sm md:text-base max-w-lg">
               The guilds that make this world possible. Follow the glowing eyes in the dark. Interested in
               sponsoring?{" "}
-              <a href="mailto:hack2Ignite@gmail.com" className="text-yellow-400 hover:text-yellow-300 underline cursor-pointer transition-colors">
-                Contact hack2Ignite@gmail.com
+              <a href="mailto:dssa.dkte24@gmail.com" className="text-yellow-400 hover:text-yellow-300 underline cursor-pointer transition-colors">
+                Contact dssa.dkte24@gmail.com
               </a>
             </p>
           </motion.div>
@@ -455,6 +571,15 @@ export default function PrizesSection() {
           </p>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedTheme && (
+          <ThemeModal 
+            theme={selectedTheme} 
+            onClose={() => setSelectedTheme(null)} 
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

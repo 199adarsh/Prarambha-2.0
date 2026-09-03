@@ -46,20 +46,11 @@ export default function Navbar() {
     <nav
       role="navigation"
       aria-label="Main navigation"
-      className="fixed bottom-6 inset-x-0 z-50 flex flex-col items-center justify-center pointer-events-none"
+      className="fixed top-6 inset-x-0 z-50 flex flex-col items-center justify-center pointer-events-none"
     >
-      {/* Active Item Label (Minecraft style above hotbar) */}
-      <div className="mb-2 font-sans font-bold text-xs text-white drop-shadow-md tracking-widest pointer-events-auto transition-all">
-        {NAV_LINKS.find(link => link.href === activeHash)?.label || "Join Server"}
-      </div>
-
       {/* The Hotbar Container */}
       <div 
-        className="flex bg-[#8B8B8B] p-[2px] pointer-events-auto" 
-        style={{ 
-          border: '2px solid #000',
-          boxShadow: '0 4px 0 rgba(0,0,0,0.5)'
-        }}
+        className="flex bg-black/60 backdrop-blur-xl p-[2px] pointer-events-auto rounded-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden" 
       >
         {NAV_LINKS.map((link, index) => {
           const isActive = activeHash === link.href;
@@ -71,14 +62,8 @@ export default function Navbar() {
                 setActiveHash(link.href);
                 playClickSound();
               }}
-              className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#8B8B8B] hover:bg-[#A0A0A0] transition-colors group"
+              className="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 hover:bg-black/80 transition-colors group border-r border-white/10 last:border-r-0"
               aria-label={link.label}
-              style={{
-                borderTop: '2px solid #373737',
-                borderLeft: '2px solid #373737',
-                borderBottom: '2px solid #FFFFFF',
-                borderRight: '2px solid #FFFFFF',
-              }}
             >
               {/* Selection Box overlay */}
               {isActive && (
@@ -87,11 +72,11 @@ export default function Navbar() {
                 </div>
               )}
               {/* Icon */}
-              <span className={`text-xl md:text-2xl ${isActive ? 'scale-110' : 'scale-100'} group-hover:scale-110 transition-transform duration-200 mc-text-shadow`}>
+              <span className={`text-lg md:text-xl ${isActive ? 'scale-110' : 'scale-100'} group-hover:scale-110 transition-transform duration-200 mc-text-shadow`}>
                 {link.icon}
               </span>
               {/* Hotbar Slot Number */}
-              <span className="absolute bottom-[2px] right-[4px] font-sans font-bold text-[0.55rem] text-white drop-shadow-md">
+              <span className="absolute bottom-[2px] right-[4px] font-pixel text-[0.55rem] text-white drop-shadow-[1px_1px_0_#000]">
                 {index + 1}
               </span>
             </a>
@@ -103,20 +88,19 @@ export default function Navbar() {
           href={REGISTER_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative w-[4.5rem] md:w-24 h-12 md:h-14 flex items-center justify-center bg-[#CC0000] hover:bg-[#FF3333] transition-colors group ml-1"
-          style={{
-            borderTop: '2px solid #660000',
-            borderLeft: '2px solid #660000',
-            borderBottom: '2px solid #FF7777',
-            borderRight: '2px solid #FF7777',
-          }}
+          className="relative w-16 md:w-20 h-10 md:h-12 flex items-center justify-center bg-gradient-to-br from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 transition-colors group"
           title="Register Now"
           onClick={playClickSound}
         >
-          <span className="font-sans font-bold text-[0.65rem] md:text-xs text-white drop-shadow-md tracking-widest group-hover:scale-105 transition-transform duration-200">
+          <span className="font-pixel text-[0.5rem] md:text-[0.55rem] text-white tracking-widest group-hover:scale-105 transition-transform duration-200 drop-shadow-[1px_1px_0_#000]">
             REGISTER
           </span>
         </a>
+      </div>
+
+      {/* Active Item Label (Minecraft style below hotbar when at top) */}
+      <div className="mt-2 font-pixel text-[0.6rem] text-white tracking-widest pointer-events-auto transition-all drop-shadow-[2px_2px_0_#000]">
+        {NAV_LINKS.find(link => link.href === activeHash)?.label || "Join Server"}
       </div>
     </nav>
   );

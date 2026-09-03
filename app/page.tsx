@@ -54,13 +54,30 @@ export default function Home() {
 
       {/* Footer */}
       <footer
-        className="border-t border-white/10 py-8 px-6 bg-[#0A0202] relative z-20"
+        className="border-t border-white/10 py-12 px-6 bg-[#0A0202] relative z-20"
         role="contentinfo"
         aria-label="Site footer"
       >
-        <div className="max-w-[1200px] mx-auto flex flex-col items-center justify-center gap-4">
-          <p className="font-sans text-[0.65rem] font-bold text-gray-500 tracking-widest text-center">
-            HACK2IGNITE © 2026 — ALL RIGHTS RESERVED
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left text-gray-400 font-sans text-sm pb-8 border-b border-white/10">
+          <div>
+            <h4 className="font-pixel text-gray-200 mb-4 text-xs tracking-widest">CONTACT & SUPPORT</h4>
+            <p>Phone: +91 7498 843 775</p>
+            <p>Phone: +91 721 946 1301</p>
+            <p>Email: dssa.dkte24@gmail.com</p>
+          </div>
+          <div>
+            <h4 className="font-pixel text-gray-200 mb-4 text-xs tracking-widest">FOLLOW US</h4>
+            <p>LinkedIn: data-science-students-association</p>
+            <p>Instagram: dssa_dkte</p>
+          </div>
+          <div className="flex flex-col items-center md:items-end justify-center">
+            <h4 className="font-pixel text-red-500 mb-2 text-xs tracking-widest drop-shadow-[0_0_10px_rgba(232,64,64,0.8)]">DSSA PRESENTS</h4>
+            <h3 className="font-pixel text-gray-200 text-lg tracking-widest">Prarambha <span className="text-red-500">2.0</span></h3>
+          </div>
+        </div>
+        <div className="max-w-[1200px] mx-auto mt-6 flex flex-col items-center justify-center">
+          <p className="font-sans text-[0.65rem] font-bold text-gray-500 tracking-widest text-center uppercase">
+            Prarambha 2.0 © 2026 — ALL RIGHTS RESERVED
           </p>
         </div>
       </footer>

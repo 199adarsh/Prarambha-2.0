@@ -1,28 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Pixelify_Sans } from "next/font/google";
-import localFont from "next/font/local";
+import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { AdvancementToast } from "./components/PolishLayer";
 
-const pixelFont = Pixelify_Sans({
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-pixel-var",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jabrisFont = localFont({
-  src: "./fonts/jabris.otf",
-  variable: "--font-jabris-var",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "hack2ignite — Build. Break. Ignite.",
+  title: "Prarambha — Build. Break. Ignite.",
   description:
-    "hack2ignite is a hackathon where builders, breakers, and creators come together to forge something legendary. Register now.",
+    "Prarambha is a hackathon where builders, breakers, and creators come together to forge something legendary. Register now.",
   openGraph: {
-    title: "hack2ignite — Build. Break. Ignite.",
+    title: "Prarambha — Build. Break. Ignite.",
     description: "A hackathon for builders and creators.",
     type: "website",
   },
@@ -38,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${pixelFont.variable} ${jabrisFont.variable} h-full`}
+      className={`${GeistPixelSquare.variable} ${GeistSans.variable} h-full`}
     >
       <body className="min-h-full flex flex-col text-white antialiased">
         <a href="#main-content" className="skip-link">

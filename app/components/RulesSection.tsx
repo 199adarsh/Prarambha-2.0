@@ -10,23 +10,37 @@ const RULES = [
   {
     id: 1,
     num: "01/05",
-    icon: <Icon icon="pixelarticons:sword" width="24" height="24" />,
-    title: "TEAM SIZE",
-    body: "2 to 4 members per team. Solo entries are not accepted. Each member must be enrolled at a recognized institution.",
+    icon: <Icon icon="pixelarticons:users" width="24" height="24" />,
+    title: "TEAM RULES",
+    body: "Maximum 4 members per team. 1st and 2nd round domains will be the same. Registration requires: Team Name, Leader Name, and Members.",
+  },
+  {
+    id: 2,
+    num: "02/05",
+    icon: <Icon icon="pixelarticons:clock" width="24" height="24" />,
+    title: "HACKATHON GUIDELINES",
+    body: "The hackathon runs from 10 AM to 10 AM (24 Hrs). Compulsory collaborative work must be demonstrated.",
+  },
+  {
+    id: 3,
+    num: "03/05",
+    icon: <Icon icon="pixelarticons:folder" width="24" height="24" />,
+    title: "SUBMISSION FORMATS",
+    body: "Only one submission per team by the leader. Allowed formats: GitHub Link, Demo Video, PPT (Template), App/Web Link, or Public Drive Link.",
   },
   {
     id: 4,
     num: "04/05",
-    icon: <Icon icon="pixelarticons:box" width="24" height="24" />,
-    title: "CODE OWNERSHIP",
-    body: "All code must be written during the event window. Pre-existing projects, forks of prior work, and template repos are strictly prohibited.",
+    icon: <Icon icon="pixelarticons:alert" width="24" height="24" />,
+    title: "DEADLINES & COMPLIANCE",
+    body: "No GitHub commits after the deadline. Late, incomplete, or inaccessible submissions will be disqualified immediately.",
   },
   {
     id: 5,
     num: "05/05",
-    icon: <Icon icon="pixelarticons:eye" width="24" height="24" />,
-    title: "AI USAGE POLICY",
-    body: "AI-assisted tools (Copilot, ChatGPT, etc.) are permitted with full disclosure. All generated code must be understood and explainable by the team.",
+    icon: <Icon icon="pixelarticons:chart-bar" width="24" height="24" />,
+    title: "EVALUATION",
+    body: "Decisions will be finalized through our panel of judges. The final decision is binding and will not be changed.",
   },
 ] as const;
 
@@ -47,10 +61,8 @@ function RuleCard({
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.08 }}
-      className={`group relative flex flex-col gap-3 p-6 rounded-xl border backdrop-blur-md transition-all duration-300
-        border-white/10 bg-[#0B1021]/60 hover:bg-[#0B1021]/80 hover:border-amber-500/50 hover:shadow-[0_0_30px_rgba(245,158,11,0.15)]
-      `}
-      style={{ margin: "6px" }}
+      className="group relative flex flex-col h-full bg-[#0F172A]/80 border-2 border-white/10 hover:border-amber-500/50 p-6 sm:p-8 backdrop-blur-sm transition-colors duration-300"
+      style={{ boxShadow: '4px 4px 0 rgba(0,0,0,0.5)' }}
     >
       {/* Hover glow overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
@@ -142,8 +154,8 @@ export default function RulesSection() {
   return (
     <section
       id="rules"
-      className="relative w-full py-32 overflow-hidden bg-[#0A0F1D]"
-      aria-label="Rules and eligibility section"
+      className="relative w-full py-16 md:py-32 overflow-hidden bg-[#0A0F1D]"
+      aria-label="Rules and Protocol"
     >
       {/* Video Background */}
       <video
@@ -161,7 +173,7 @@ export default function RulesSection() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-900/10 via-transparent to-transparent z-0 pointer-events-none" />
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-4 md:px-8">
-        
+
         {/* Section header */}
         <motion.div
           ref={headerRef}
@@ -170,29 +182,32 @@ export default function RulesSection() {
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <div className="inline-flex items-center gap-3 border-2 border-amber-900 bg-amber-900/20 px-4 py-2 mb-6 backdrop-blur-md">
-            <Icon icon="pixelarticons:book-open" className="text-amber-500 text-xl" />
-            <span className="font-sans text-xs font-bold text-amber-300 tracking-[0.2em]">
-              CHAPTER 03
+          <div className="inline-flex items-center gap-2 md:gap-3 border-2 border-amber-900 bg-amber-900/20 px-3 md:px-4 py-1.5 md:py-2 mb-4 md:mb-6 backdrop-blur-md">
+            <Icon icon="pixelarticons:book-open" className="text-amber-500 text-lg md:text-xl" />
+            <span className="font-sans text-[0.65rem] md:text-xs font-bold text-amber-300 tracking-[0.2em]">
+              CHAPTER 04
             </span>
           </div>
 
-          <h2
-            className="font-pixel text-4xl md:text-5xl lg:text-6xl text-white mb-6"
-            style={{ textShadow: "4px 4px 0 #78350F" }}
-          >
-            RULES
-          </h2>
-          <p className="font-sans text-gray-300 text-base md:text-lg max-w-2xl leading-relaxed"
-             style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>
-            Read carefully before you craft your entry. Gather around the fire, listen closely, and ensure every voxel counts in the grand design.
+          <div className="flex items-center gap-4 mb-4">
+            <Icon icon="pixelarticons:book-open" className="text-gray-300 text-4xl drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]" />
+            <h2
+              className="font-pixel text-4xl md:text-5xl text-gray-200"
+              style={{ textShadow: "0 0 15px rgba(255,255,255,0.2)" }}
+            >
+              PROTOCOL & PHASES
+            </h2>
+          </div>
+          <p className="font-sans text-gray-300 text-sm md:text-lg max-w-2xl leading-relaxed"
+            style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>
+            Read carefully before registering for Prarambha 2.0.
           </p>
         </motion.div>
 
-        {/* 3×2 inventory grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-          {RULES.map((rule, i) => (
-            <RuleCard key={rule.id} rule={rule} index={i} />
+        {/* Rules Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+          {RULES.map((rule, idx) => (
+            <RuleCard key={rule.id} rule={rule} index={idx} />
           ))}
           <EmptySlot />
         </div>
@@ -226,12 +241,8 @@ export default function RulesSection() {
         <div className="mt-16 rounded-xl overflow-hidden border border-white/5">
           <NightGrassDivider />
           <div className="px-4 py-4 bg-[#050811]">
-            {/* Rules last updated date */}
             <p className="font-sans text-xs text-gray-500 text-center">
-              Rules subject to change.&nbsp;
-              <span className="text-gray-400">
-                Last updated: <span className="text-gray-300">January 1, 2026</span>
-              </span>
+              Rules and event guidelines are subject to official updates.
             </p>
           </div>
         </div>
