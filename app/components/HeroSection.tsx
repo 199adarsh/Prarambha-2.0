@@ -13,6 +13,26 @@ const REGISTER_URL = "https://unstop.com";
 
 const LOADER_SEGMENTS = 20;
 
+/* ── SplitText Helper ────────────────────────────────────────────── */
+function SplitText({ text, className = "" }: { text: string; className?: string }) {
+  return (
+    <>
+      {text.split("").map((char, index) => {
+        if (char === " ") return <span key={index}>&nbsp;</span>;
+        return (
+          <span
+            key={index}
+            className={`split-char ${className}`}
+            style={{ opacity: 0, transform: "translateY(30px)", display: "inline-block" }}
+          >
+            {char}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+
 /* ── World-gen loading screen ─────────────────────────────────────── */
 function WorldLoader({ onComplete, isReady }: { onComplete: () => void, isReady: boolean }) {
   const [filled, setFilled] = useState(0);
@@ -168,36 +188,6 @@ export default function HeroSection() {
       const content = contentRef.current;
       if (!content) return;
 
-      // Split title into characters
-      const titleEl = titleRef.current;
-      if (titleEl && !titleEl.hasAttribute("data-split")) {
-        const originalHTML = titleEl.innerHTML;
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = originalHTML;
-
-        let charHTML = "";
-        const processNode = (node: ChildNode) => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const text = node.textContent || "";
-            for (const char of text) {
-              if (char === " ") {
-                charHTML += " ";
-              } else {
-                charHTML += `<span class="split-char" style="opacity:0; transform:translateY(30px); display:inline-block">${char}</span>`;
-              }
-            }
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            const el = node as HTMLElement;
-            charHTML += `<${el.tagName.toLowerCase()} class="${el.className}" style="${el.getAttribute("style") || ""}">`;
-            el.childNodes.forEach(processNode);
-            charHTML += `</${el.tagName.toLowerCase()}>`;
-          }
-        };
-        tempDiv.childNodes.forEach(processNode);
-        titleEl.innerHTML = charHTML;
-        titleEl.setAttribute("data-split", "true");
-      }
-
       // Elements to reveal
       const label = content.querySelector("[data-hero-label]");
       const chars = content.querySelectorAll(".split-char");
@@ -347,14 +337,16 @@ export default function HeroSection() {
             {/* Main title */}
             <h1
               ref={titleRef}
-              className="font-pixel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 leading-none mb-4"
+              className="font-pixel text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-none mb-4"
               style={{
                 filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.8))",
               }}
             >
-              Prarambha{" "}
-              <span className="text-red-500 drop-shadow-[0_0_15px_rgba(232,64,64,0.6)]">
-                2.0
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 inline-block mr-4">
+                <SplitText text="Prarambha" />
+              </span>
+              <span className="text-red-500 drop-shadow-[0_0_15px_rgba(232,64,64,0.6)] inline-block">
+                <SplitText text="2.0" />
               </span>
             </h1>
 
