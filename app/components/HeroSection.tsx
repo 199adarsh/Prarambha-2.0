@@ -342,8 +342,11 @@ export default function HeroSection() {
                 filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.8))",
               }}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 inline-block mr-4">
-                <SplitText text="Prarambha" />
+              <span className="inline-block mr-4">
+                <SplitText 
+                  text="Prarambha" 
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500"
+                />
               </span>
               <span className="text-red-500 drop-shadow-[0_0_15px_rgba(232,64,64,0.6)] inline-block">
                 <SplitText text="2.0" />
