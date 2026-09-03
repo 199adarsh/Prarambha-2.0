@@ -14,7 +14,7 @@ const REGISTER_URL = "https://unstop.com";
 const LOADER_SEGMENTS = 20;
 
 /* ── World-gen loading screen ─────────────────────────────────────── */
-function WorldLoader({ onComplete }: { onComplete: () => void }) {
+function WorldLoader({ onComplete, isReady }: { onComplete: () => void, isReady: boolean }) {
   const [filled, setFilled] = useState(0);
   const [statusText, setStatusText] = useState("Initializing world seed...");
 
@@ -38,22 +38,33 @@ function WorldLoader({ onComplete }: { onComplete: () => void }) {
       return;
     }
 
-    let count = 0;
     const interval = setInterval(() => {
-      count += 1;
-      setFilled(count);
-      setStatusText(
-        STATUSES[Math.floor((count / LOADER_SEGMENTS) * (STATUSES.length - 1))]
-      );
-      if (count >= LOADER_SEGMENTS) {
-        clearInterval(interval);
-        setTimeout(onComplete, 500);
-      }
+      setFilled((prev) => {
+        // Stop at 90% (LOADER_SEGMENTS - 2) if not ready
+        if (prev < LOADER_SEGMENTS - 2) {
+          return prev + 1;
+        }
+        return prev;
+      });
     }, 90);
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setStatusText(
+      STATUSES[Math.floor((Math.min(filled, LOADER_SEGMENTS - 1) / LOADER_SEGMENTS) * (STATUSES.length - 1))]
+    );
+    
+    // When fake progress is done AND actual resources are ready, complete it
+    if (filled >= LOADER_SEGMENTS - 2 && isReady) {
+      setFilled(LOADER_SEGMENTS);
+      setStatusText("Done!");
+      const timer = setTimeout(onComplete, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [filled, isReady, onComplete]);
 
   return (
     <motion.div
@@ -122,12 +133,23 @@ function StatChip({
 /* ── Main hero component ──────────────────────────────────────────── */
 export default function HeroSection() {
   const [loading, setLoading] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [timeoutReached, setTimeoutReached] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleLoadComplete = useCallback(() => setLoading(false), []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutReached(true);
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isReady = videoLoaded || timeoutReached;
 
   // ── Cinematic entrance timeline ──
   useGSAP(
@@ -148,7 +170,7 @@ export default function HeroSection() {
 
       // Split title into characters
       const titleEl = titleRef.current;
-      if (titleEl) {
+      if (titleEl && !titleEl.hasAttribute("data-split")) {
         const originalHTML = titleEl.innerHTML;
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = originalHTML;
@@ -161,7 +183,7 @@ export default function HeroSection() {
               if (char === " ") {
                 charHTML += " ";
               } else {
-                charHTML += `<span class="split-char" style="opacity:0; transform:translateY(30px)">${char}</span>`;
+                charHTML += `<span class="split-char" style="opacity:0; transform:translateY(30px); display:inline-block">${char}</span>`;
               }
             }
           } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -173,6 +195,7 @@ export default function HeroSection() {
         };
         tempDiv.childNodes.forEach(processNode);
         titleEl.innerHTML = charHTML;
+        titleEl.setAttribute("data-split", "true");
       }
 
       // Elements to reveal
@@ -275,7 +298,7 @@ export default function HeroSection() {
   return (
     <>
       <AnimatePresence>
-        {loading && <WorldLoader onComplete={handleLoadComplete} />}
+        {loading && <WorldLoader onComplete={handleLoadComplete} isReady={isReady} />}
       </AnimatePresence>
 
       <section
@@ -291,7 +314,9 @@ export default function HeroSection() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+          onCanPlayThrough={() => setVideoLoaded(true)}
+          style={{ opacity: (!videoLoaded && timeoutReached) ? 0 : 1 }}
+          className="absolute inset-0 w-full h-full object-cover object-bottom z-0 transition-opacity duration-1000"
         >
           <source src="/Minecraft-Hero.mp4" type="video/mp4" />
         </video>
