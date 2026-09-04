@@ -5,42 +5,79 @@ import { Icon } from "@iconify/react";
 import { gsap, useGSAP } from "../utils/gsap";
 
 /* ── Rule card data ──────────────────────────────────────────────── */
-// TODO: Replace all placeholder content with finalized rules
-const RULES = [
+type Rule = {
+  id: number;
+  num: string;
+  icon: JSX.Element;
+  title: string;
+  body: string[];
+};
+
+const RULES: readonly Rule[] = [
   {
     id: 1,
-    num: "01/05",
+    num: "01/06",
     icon: <Icon icon="pixelarticons:users" width="24" height="24" />,
-    title: "TEAM RULES",
-    body: "Maximum 4 members per team. 1st and 2nd round domains will be the same. Registration requires: Team Name, Leader Name, and Members.",
+    title: "TEAM FORMATION",
+    body: [
+      "Maximum 4 members per team.",
+      "Only one submission per team is allowed.",
+      "Submission should be made by the team leader.",
+      "Team details must be submitted through the Google Form: Team Name, Team Leader Name, Team Members",
+    ],
   },
   {
     id: 2,
-    num: "02/05",
-    icon: <Icon icon="pixelarticons:clock" width="24" height="24" />,
-    title: "HACKATHON GUIDELINES",
-    body: "The hackathon runs from 10 AM to 10 AM (24 Hrs). Compulsory collaborative work must be demonstrated.",
+    num: "02/06",
+    icon: <Icon icon="pixelarticons:bullseye" width="24" height="24" />,
+    title: "DOMAIN & ROUND RULES",
+    body: [
+      "The domain must remain the same for the 1st and 2nd rounds."
+    ],
   },
   {
     id: 3,
-    num: "03/05",
-    icon: <Icon icon="pixelarticons:folder" width="24" height="24" />,
-    title: "SUBMISSION FORMATS",
-    body: "Only one submission per team by the leader. Allowed formats: GitHub Link, Demo Video, PPT (Template), App/Web Link, or Public Drive Link.",
+    num: "03/06",
+    icon: <Icon icon="pixelarticons:code" width="24" height="24" />,
+    title: "DEVELOPMENT & GITHUB",
+    body: [
+      "GitHub commits are not allowed after the deadline.",
+      "A collaborative contribution/addition is compulsory."
+    ],
   },
   {
     id: 4,
-    num: "04/05",
-    icon: <Icon icon="pixelarticons:alert" width="24" height="24" />,
-    title: "DEADLINES & COMPLIANCE",
-    body: "No GitHub commits after the deadline. Late, incomplete, or inaccessible submissions will be disqualified immediately.",
+    num: "04/06",
+    icon: <Icon icon="pixelarticons:folder" width="24" height="24" />,
+    title: "PROJECT SUBMISSION",
+    body: [
+      "The following should be submitted:",
+      "GitHub Link",
+      "Demo Video",
+      "PPT (using the provided template)",
+      "App/Web Link",
+      "Public Google Drive Link, if required"
+    ],
   },
   {
     id: 5,
-    num: "05/05",
-    icon: <Icon icon="pixelarticons:chart-bar" width="24" height="24" />,
-    title: "EVALUATION",
-    body: "Decisions will be finalized through our panel of judges. The final decision is binding and will not be changed.",
+    num: "05/06",
+    icon: <Icon icon="pixelarticons:scale" width="24" height="24" />,
+    title: "EVALUATION & JUDGING",
+    body: [
+      "The decision will be finalized by the judges.",
+      "The final decision cannot be changed."
+    ],
+  },
+  {
+    id: 6,
+    num: "06/06",
+    icon: <Icon icon="pixelarticons:alert" width="24" height="24" />,
+    title: "SUBMISSION CONDITIONS",
+    body: [
+      "If the required template/submission format is not followed or accessible properly, the submission may be disqualified.",
+      "Late submissions will not be accepted."
+    ],
   },
 ] as const;
 
@@ -48,7 +85,7 @@ const RULES = [
 function RuleCard({
   rule,
 }: {
-  rule: (typeof RULES)[number];
+  rule: Rule;
 }) {
   return (
     <div
@@ -81,45 +118,16 @@ function RuleCard({
       </h3>
 
       {/* Body */}
-      <p className="relative z-10 font-sans text-sm text-gray-300 leading-relaxed flex-1 mt-1">
-        {rule.body}
-      </p>
+      <ul className="relative z-10 font-sans text-sm text-gray-300 leading-relaxed flex-1 mt-3 space-y-1.5 list-disc pl-4 marker:text-amber-500/70">
+        {rule.body.map((point, index) => (
+          <li key={index} className="pl-1">{point}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-/* ── Empty slot (6th cell in 3×2 grid) ──────────────────────────── */
-function EmptySlot() {
-  return (
-    <div
-      className="hidden md:flex flex-col items-center justify-center p-6 rounded-xl border border-white/5 bg-white/5 backdrop-blur-sm"
-      style={{
-        margin: "6px",
-        minHeight: 240,
-      }}
-      aria-hidden
-    >
-      <div className="text-center opacity-40">
-        <Icon
-          icon="pixelarticons:lock"
-          className="w-8 h-8 text-gray-500 mx-auto mb-3"
-        />
-        <div className="font-sans text-[0.65rem] font-bold text-gray-400 tracking-widest">
-          SLOT RESERVED
-        </div>
-        <div className="font-sans text-[0.6rem] font-bold text-gray-500 mt-2">
-          [COMING SOON]
-        </div>
-        {/* Dotted crafting-table pattern */}
-        <div className="mt-4 grid grid-cols-3 gap-1 mx-auto w-fit opacity-50">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} className="w-3 h-3 border border-gray-600/50" />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 /* ── Grass block divider (Night Mode) ────────────────────────────── */
 function NightGrassDivider() {
@@ -315,7 +323,6 @@ export default function RulesSection() {
           {RULES.map((rule) => (
             <RuleCard key={rule.id} rule={rule} />
           ))}
-          <EmptySlot />
         </div>
 
         {/* "Build the future" motivational strip */}

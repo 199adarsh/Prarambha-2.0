@@ -133,17 +133,17 @@ function StatChip({
   value: string;
 }) {
   return (
-    <div className="flex-1 min-w-0 sm:min-w-[120px] bg-black/40 backdrop-blur-xl p-2 sm:p-3 flex flex-col items-start gap-1 sm:gap-1.5 border border-white/10 hover:border-red-500/50 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    <div className="flex-1 min-w-0 sm:min-w-[140px] bg-white/95 backdrop-blur-xl p-3 sm:p-4 flex flex-col items-start gap-1 sm:gap-2 border border-white/20 hover:border-red-500/50 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:bg-white hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div className="flex items-center gap-1.5 sm:gap-2 relative z-10 w-full">
-        <span className="text-red-500 text-base sm:text-lg flex items-center justify-center drop-shadow-[0_0_8px_rgba(232,64,64,0.6)] group-hover:scale-110 transition-transform duration-300">
+        <span className="text-red-600 text-lg sm:text-2xl flex items-center justify-center drop-shadow-[0_0_4px_rgba(232,64,64,0.3)] group-hover:scale-110 transition-transform duration-300">
           {icon}
         </span>
-        <span className="font-pixel text-[0.4rem] sm:text-[0.45rem] font-bold text-gray-300 tracking-widest uppercase truncate">
+        <span className="font-pixel text-[0.45rem] sm:text-[0.5rem] font-bold text-gray-500 tracking-widest uppercase truncate">
           {label}
         </span>
       </div>
-      <span className="font-pixel text-[0.5rem] sm:text-[0.6rem] text-white drop-shadow-md relative z-10 mt-0.5 mc-text-shadow">
+      <span className="font-pixel text-[0.6rem] sm:text-[0.7rem] text-black font-bold drop-shadow-sm relative z-10 mt-0.5">
         {value}
       </span>
     </div>
@@ -415,7 +415,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Column: Stats Only */}
-          <div className="hidden lg:flex w-full lg:absolute lg:bottom-0 lg:right-0 flex-col items-center lg:items-end lg:w-auto mt-12 lg:mt-0 z-20">
+          <div className="flex w-full lg:absolute lg:-bottom-10 lg:right-0 flex-col items-center lg:items-end lg:w-auto mt-16 lg:mt-0 z-20">
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-4 w-full max-w-md">
               <div data-hero-stat>

@@ -11,13 +11,13 @@ import { gsap, useGSAP } from "../utils/gsap";
 /* ── Prize data ──────────────────────────────────────────────────── */
 const DOMAINS = [
   {
-    rank: "HEALTHCARE",
-    amount: "HEAL",
+    rank: "THEME 01",
+    amount: "HEALTHCARE",
     rarity: "WELLNESS",
     rarityColor: "#FDE047",
     borderColor: "#FDE047",
     glowColor: "rgba(253,224,71,0.4)",
-    chestImage: "/chests/chest-gold-v2.png",
+    chestImage: "/chests/HELTH.png",
     desc: "Innovate health-tech solutions",
     problemStatements: [
       "AI-driven early disease prediction",
@@ -26,13 +26,13 @@ const DOMAINS = [
     ],
   },
   {
-    rank: "AGENTIC AI",
-    amount: "AI",
+    rank: "THEME 02",
+    amount: "AGENTIC AI",
     rarity: "INTELLIGENCE",
     rarityColor: "#93C5FD",
     borderColor: "#93C5FD",
     glowColor: "rgba(147,197,253,0.3)",
-    chestImage: "/chests/chest-cyan-v2.png",
+    chestImage: "/chests/AGENT.png",
     desc: "Build autonomous AI agents",
     problemStatements: [
       "Autonomous coding and debugging assistants",
@@ -41,13 +41,13 @@ const DOMAINS = [
     ],
   },
   {
-    rank: "EDUTECH",
-    amount: "LEARN",
+    rank: "THEME 03",
+    amount: "EDUTECH",
     rarity: "EDUCATION",
     rarityColor: "#86EFAC",
     borderColor: "#86EFAC",
     glowColor: "rgba(134,239,172,0.3)",
-    chestImage: "/chests/chest-green-v2.png",
+    chestImage: "/chests/EDU.png",
     desc: "Revolutionize learning experiences",
     problemStatements: [
       "Personalized AI learning paths",
@@ -56,13 +56,13 @@ const DOMAINS = [
     ],
   },
   {
-    rank: "AGRITECH",
-    amount: "GROW",
+    rank: "THEME 04",
+    amount: "AGRITECH",
     rarity: "AGRICULTURE",
     rarityColor: "#FCA5A5",
     borderColor: "#FCA5A5",
     glowColor: "rgba(252,165,165,0.3)",
-    chestImage: "/chests/chest-gold-v2.png",
+    chestImage: "/chests/AGRI.png",
     desc: "Empower agriculture through tech",
     problemStatements: [
       "IoT-based smart irrigation systems",
@@ -254,18 +254,18 @@ function ThemeModal({
           <p className="font-sans text-sm text-gray-300 mb-6">{theme.desc}</p>
 
           <div className="w-full text-left">
-            <h4 className="font-pixel text-xs text-gray-400 tracking-widest mb-4 border-b border-white/10 pb-2">
+            <h4 className="font-pixel text-sm md:text-base text-gray-400 tracking-widest mb-4 border-b border-white/10 pb-2">
               PROBLEM STATEMENTS
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {theme.problemStatements.map((statement, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 font-sans text-sm text-gray-200"
+                  className="flex items-start gap-3 font-sans text-base md:text-lg font-medium text-gray-200"
                 >
                   <Icon
                     icon="pixelarticons:chevron-right"
-                    className="shrink-0 mt-0.5"
+                    className="shrink-0 mt-1 text-xl"
                     style={{ color: theme.rarityColor }}
                   />
                   <span>{statement}</span>
