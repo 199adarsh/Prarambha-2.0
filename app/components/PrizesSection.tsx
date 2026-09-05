@@ -100,7 +100,7 @@ const PRIZE_TIERS = [
   {
     label: "ADDITIONAL REWARDS",
     items: [
-      { text: "SWAGS" },
+      { text: "OPPORTUNITIES" },
       { text: "MENTORSHIP" },
       { text: "NETWORKING" },
     ],
