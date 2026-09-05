@@ -35,7 +35,7 @@ const DOMAINS = [
     glowColor: "rgba(147,197,253,0.3)",
     chestImage: "/chests/AGENT.png",
     desc: "Build autonomous AI agents",
-    contact: "Agentic Ai Head- Shahid : +91 72767 76558",
+    contact: "Contact - Shahid : +91 72767 76558",
     problemStatements: [
       "Autonomous coding and debugging assistants",
       "Automated multi-step customer support agents",
@@ -51,7 +51,7 @@ const DOMAINS = [
     glowColor: "rgba(134,239,172,0.3)",
     chestImage: "/chests/EDU.png",
     desc: "Revolutionize learning experiences",
-    contact: "Edutech Head- Adarsh : +91 96651 53311",
+    contact: "Contact - Adarsh : +91 96651 53311",
     problemStatements: [
       "Personalized AI learning paths",
       "Gamified virtual classrooms",
@@ -67,7 +67,7 @@ const DOMAINS = [
     glowColor: "rgba(252,165,165,0.3)",
     chestImage: "/chests/AGRI.png",
     desc: "Empower agriculture through tech",
-    contact: "Agritech Head- Saniya : +91 92702 26272",
+    contact: "Contact - Saniya : +91 92702 26272",
     problemStatements: [
       "IoT-based smart irrigation systems",
       "Crop disease prediction models",

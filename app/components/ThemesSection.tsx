@@ -12,7 +12,7 @@ const THEMES = [
     desc: "Innovate solutions for modern healthcare challenges, improving patient care and medical systems.",
     color: "from-rose-500/20 to-transparent",
     border: "group-hover:border-rose-500/50",
-    contact: "Contact - Farheen : +91 84465 44528"
+    contact: "Farheen : +91 84465 44528"
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const THEMES = [
     desc: "Build autonomous AI agents that can reason, plan, and execute complex workflows.",
     color: "from-cyan-500/20 to-transparent",
     border: "group-hover:border-cyan-500/50",
-    contact: "Contact - Shahid : +91 72767 76558"
+    contact: "Shahid : +91 72767 76558"
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const THEMES = [
     desc: "Transform the future of education with accessible, engaging, and smart learning tools.",
     color: "from-amber-500/20 to-transparent",
     border: "group-hover:border-amber-500/50",
-    contact: "Contact - Adarsh : +91 96651 53311"
+    contact: "Adarsh : +91 96651 53311"
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const THEMES = [
     desc: "Empower agriculture through technology to increase yield, sustainability, and efficiency.",
     color: "from-emerald-500/20 to-transparent",
     border: "group-hover:border-emerald-500/50",
-    contact: "Contact - Saniya : +91 92702 26272"
+    contact: "Saniya : +91 92702 26272"
   }
 ];
 
