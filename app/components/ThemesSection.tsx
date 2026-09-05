@@ -100,7 +100,7 @@ export default function ThemesSection() {
             <motion.div
               key={theme.id}
               variants={itemVariants}
-              onClick={() => alert("Problem statements will be displayed on 20 Sept")}
+              onClick={() => alert(`Problem statements will be displayed on 20 Sept\n\nContact: ${theme.contact}`)}
               className={`
                 group relative p-8 rounded-2xl border border-white/10 bg-black/60 backdrop-blur-xl 
                 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer
