@@ -80,7 +80,7 @@ const DOMAINS = [
 const PRIZE_TIERS = [
   {
     label: "GRAND PRIZE",
-    items: [{ text: "22K PRIZE POOL" }],
+    items: [{ text: "20K+ PRIZE POOL" }],
     borderColor: "#FDE047",
     labelColor: "#FDE047",
     height: "h-32",

@@ -437,7 +437,7 @@ export default function HeroSection() {
                     <Icon icon="pixelarticons:coins" width="36" height="36" />
                   }
                   label="Prize Pool"
-                  value="22K"
+                  value="20K+"
                 />
               </div>
             </div>

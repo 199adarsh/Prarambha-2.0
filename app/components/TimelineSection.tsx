@@ -10,7 +10,7 @@ const MILESTONES = [
     id: 1,
     label: "Registrations Open",
     icon: "pixelarticons:map",
-    date: "Registration open till Sep 19, 2026",
+    date: "Registration open till Sept 19, 2026",
     desc: "Secure your spot in the hackathon and register your team.",
     phase: "LEVEL 1",
     highlight: false,
@@ -20,7 +20,7 @@ const MILESTONES = [
     label: "Round 1 – Online Hackathon",
     icon: "pixelarticons:compass",
     date: "Sep 20 – 21, 2026",
-    desc: "The 24-hour hackathon begins. Solve the problem and build your innovative solution.",
+    desc: "The Online 24-hour hackathon (20 Sept 10 AM to 21 Sept 10 AM) begins. Solve the problem and build your innovative solution.",
     phase: "LEVEL 2",
     highlight: false,
   },
@@ -81,7 +81,7 @@ function TimelineCard({
             <TimelineDate milestone={milestone} alignment="right" />
           )}
         </div>
-        
+
         {/* Right Side */}
         <div className="w-[45%] flex justify-start pl-10">
           {!isLeft ? (
@@ -102,7 +102,7 @@ function TimelineCard({
 
 function TimelineDate({ milestone, alignment }: { milestone: (typeof MILESTONES)[number], alignment: "left" | "right" }) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, x: alignment === "left" ? -20 : 20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
@@ -118,12 +118,12 @@ function TimelineDate({ milestone, alignment }: { milestone: (typeof MILESTONES)
   );
 }
 
-function TimelineCardContent({ 
-  milestone, 
-  unlocked, 
+function TimelineCardContent({
+  milestone,
+  unlocked,
   setUnlocked,
   showDateOnMobile = false
-}: { 
+}: {
   milestone: (typeof MILESTONES)[number];
   unlocked: boolean;
   setUnlocked: (val: boolean) => void;
@@ -137,14 +137,13 @@ function TimelineCardContent({
       transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
       onClick={() => {
         setUnlocked(true);
-        if(!unlocked) import("../utils/sounds").then((mod) => mod.playScrollTickSound());
+        if (!unlocked) import("../utils/sounds").then((mod) => mod.playScrollTickSound());
       }}
       className={`
         w-full p-4 border-[3px] shadow-[4px_4px_0_#000] group relative overflow-hidden transition-all duration-300 cursor-pointer pixel-corners
-        ${
-          milestone.highlight
-            ? "border-yellow-400 bg-yellow-900/40 hover:bg-yellow-800/60"
-            : "border-cyan-400 bg-cyan-950/40 hover:bg-cyan-900/60"
+        ${milestone.highlight
+          ? "border-yellow-400 bg-yellow-900/40 hover:bg-yellow-800/60"
+          : "border-cyan-400 bg-cyan-950/40 hover:bg-cyan-900/60"
         }
       `}
     >
@@ -180,21 +179,20 @@ function TimelineCardContent({
             />
             {milestone.phase}
           </span>
-          
+
           {showDateOnMobile && (
-            <div className="md:hidden font-pixel text-[8px] sm:text-[9px] text-gray-300 bg-black/50 px-1.5 py-0.5 border border-gray-600 flex items-center gap-1 w-fit max-w-[60%] line-clamp-2">
+            <div className="md:hidden font-pixel text-[8px] sm:text-[9px] text-gray-300 bg-black/50 px-1.5 py-0.5 border border-gray-600 flex items-center gap-1 w-fit max-w-[70%] sm:max-w-none">
               <Icon icon="pixelarticons:clock" className="text-cyan-500 shrink-0" />
-              <span className="truncate">{milestone.date}</span>
+              <span className="whitespace-normal leading-tight">{milestone.date}</span>
             </div>
           )}
         </div>
 
         <h3
-          className={`font-pixel text-lg md:text-xl mt-1 leading-snug ${
-            milestone.highlight
-              ? "text-yellow-400 drop-shadow-[2px_2px_0_#000]"
-              : "text-white drop-shadow-[2px_2px_0_#000]"
-          }`}
+          className={`font-pixel text-lg md:text-xl mt-1 leading-snug ${milestone.highlight
+            ? "text-yellow-400 drop-shadow-[2px_2px_0_#000]"
+            : "text-white drop-shadow-[2px_2px_0_#000]"
+            }`}
         >
           {milestone.label}
         </h3>
@@ -202,7 +200,7 @@ function TimelineCardContent({
         <p className="font-sans text-xs md:text-sm text-gray-200 leading-relaxed border-l-2 pl-2 border-white/20 mt-1">
           {milestone.desc}
         </p>
-        
+
         {milestone.highlight && (
           <div className="mt-2 text-[10px] font-pixel text-black bg-yellow-400 border border-white px-2 py-1 inline-block w-fit shadow-[2px_2px_0_#000] animate-bounce">
             FINAL BATTLE
@@ -223,7 +221,8 @@ export default function TimelineSection() {
       aria-label="Event Timeline"
     >
       {/* CSS for pixel corners */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .pixel-corners {
           clip-path: polygon(
             0 4px, 4px 4px, 4px 0, 
@@ -249,10 +248,10 @@ export default function TimelineSection() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-        
+
         {/* Header */}
         <div className="text-center flex flex-col items-center mb-10 md:mb-16">
-          <motion.div 
+          <motion.div
             initial={{ y: 15, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
@@ -277,7 +276,7 @@ export default function TimelineSection() {
           >
             Quest Log
           </motion.h2>
-          
+
           <motion.p
             initial={{ y: 15, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -293,7 +292,7 @@ export default function TimelineSection() {
         <div className="relative">
           {/* Vertical Track Line */}
           <div className="absolute left-11 md:left-1/2 top-0 bottom-0 w-1 md:-ml-0.5 bg-cyan-900/30 border-x border-dashed border-cyan-800 z-0"></div>
-          
+
           <div className="flex flex-col">
             {MILESTONES.map((m, i) => (
               <TimelineCard key={m.id} milestone={m} index={i} />
