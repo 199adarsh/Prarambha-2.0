@@ -19,7 +19,7 @@ const DOMAINS = [
     glowColor: "rgba(253,224,71,0.4)",
     chestImage: "/chests/HELTH.png",
     desc: "Innovate health-tech solutions",
-    contact: "MediTech Head- Farheen : +91 84465 44528",
+    contact: "Contact - Farheen : +91 84465 44528",
     problemStatements: [
       "AI-driven early disease prediction",
       "Remote patient monitoring systems",
