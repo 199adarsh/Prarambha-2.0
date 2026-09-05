@@ -65,7 +65,9 @@ export default function Home() {
             <h4 className="font-pixel text-gray-200 mb-4 text-xs tracking-widest">
               CONTACT & SUPPORT
             </h4>
+            <p>Raviraj More</p>
             <p>Phone: +91 91308 17727</p>
+            <p>Samiksha Kukade</p>
             <p>Phone: +91 755 845 4108</p>
             <p>Email: dssa.dkte24@gmail.com</p>
           </div>
@@ -81,8 +83,7 @@ export default function Home() {
               DSSA PRESENTS
             </h4>
             <h3 className="font-pixel text-gray-200 text-lg tracking-widest">
-              Prarambha{" "}
-              <span className="text-red-500">2.0</span>
+              Prarambha <span className="text-red-500">2.0</span>
             </h3>
           </div>
         </div>
