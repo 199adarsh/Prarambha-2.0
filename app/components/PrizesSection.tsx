@@ -19,6 +19,7 @@ const DOMAINS = [
     glowColor: "rgba(253,224,71,0.4)",
     chestImage: "/chests/HELTH.png",
     desc: "Innovate health-tech solutions",
+    contact: "MediTech Head- Farheen : +91 84465 44528",
     problemStatements: [
       "AI-driven early disease prediction",
       "Remote patient monitoring systems",
@@ -34,6 +35,7 @@ const DOMAINS = [
     glowColor: "rgba(147,197,253,0.3)",
     chestImage: "/chests/AGENT.png",
     desc: "Build autonomous AI agents",
+    contact: "Agentic Ai Head- Shahid : +91 72767 76558",
     problemStatements: [
       "Autonomous coding and debugging assistants",
       "Automated multi-step customer support agents",
@@ -49,6 +51,7 @@ const DOMAINS = [
     glowColor: "rgba(134,239,172,0.3)",
     chestImage: "/chests/EDU.png",
     desc: "Revolutionize learning experiences",
+    contact: "Edutech Head- Adarsh : +91 96651 53311",
     problemStatements: [
       "Personalized AI learning paths",
       "Gamified virtual classrooms",
@@ -64,6 +67,7 @@ const DOMAINS = [
     glowColor: "rgba(252,165,165,0.3)",
     chestImage: "/chests/AGRI.png",
     desc: "Empower agriculture through tech",
+    contact: "Agritech Head- Saniya : +91 92702 26272",
     problemStatements: [
       "IoT-based smart irrigation systems",
       "Crop disease prediction models",
@@ -243,8 +247,9 @@ function ThemeModal({
             <h4 className="font-pixel text-sm md:text-base text-gray-400 tracking-widest mb-4 border-b border-white/10 pb-2">
               PROBLEM STATEMENTS
             </h4>
-            <div className="font-sans text-base md:text-lg font-medium text-amber-500 bg-amber-500/10 p-4 border border-amber-500/20 rounded-lg text-center">
-              Problem statements will be displayed on 20 Sept
+            <div className="font-sans text-base md:text-lg font-medium text-amber-500 bg-amber-500/10 p-4 border border-amber-500/20 rounded-lg text-center flex flex-col gap-2">
+              <span>Problem statements will be displayed on 20 Sept</span>
+              <span className="text-sm text-amber-500/80">Contact: {theme.contact}</span>
             </div>
           </div>
         </div>
@@ -390,6 +395,11 @@ function PrizeCard({
       <p className="relative z-10 font-sans text-xs text-gray-400 text-center">
         {prize.desc}
       </p>
+
+      <div className="relative z-10 w-full pt-3 border-t border-white/10 flex flex-col items-center gap-1 text-center">
+        <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Tap to view</span>
+        <span className="text-xs text-gray-300 font-sans">{prize.contact}</span>
+      </div>
     </div>
   );
 }
