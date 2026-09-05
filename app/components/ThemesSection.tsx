@@ -11,7 +11,8 @@ const THEMES = [
     icon: "pixelarticons:heart",
     desc: "Innovate solutions for modern healthcare challenges, improving patient care and medical systems.",
     color: "from-rose-500/20 to-transparent",
-    border: "group-hover:border-rose-500/50"
+    border: "group-hover:border-rose-500/50",
+    contact: "MediTech Head- Farheen : +91 84465 44528"
   },
   {
     id: 2,
@@ -19,7 +20,8 @@ const THEMES = [
     icon: "pixelarticons:cpu",
     desc: "Build autonomous AI agents that can reason, plan, and execute complex workflows.",
     color: "from-cyan-500/20 to-transparent",
-    border: "group-hover:border-cyan-500/50"
+    border: "group-hover:border-cyan-500/50",
+    contact: "Agentic Ai Head- Shahid : +91 72767 76558"
   },
   {
     id: 3,
@@ -27,7 +29,8 @@ const THEMES = [
     icon: "pixelarticons:book-open",
     desc: "Transform the future of education with accessible, engaging, and smart learning tools.",
     color: "from-amber-500/20 to-transparent",
-    border: "group-hover:border-amber-500/50"
+    border: "group-hover:border-amber-500/50",
+    contact: "Edutech Head- Adarsh : +91 96651 53311"
   },
   {
     id: 4,
@@ -35,7 +38,8 @@ const THEMES = [
     icon: "pixelarticons:leaf",
     desc: "Empower agriculture through technology to increase yield, sustainability, and efficiency.",
     color: "from-emerald-500/20 to-transparent",
-    border: "group-hover:border-emerald-500/50"
+    border: "group-hover:border-emerald-500/50",
+    contact: "Agritech Head- Saniya : +91 92702 26272"
   }
 ];
 
@@ -118,6 +122,11 @@ export default function ThemesSection() {
                 <p className="font-sans text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
                   {theme.desc}
                 </p>
+
+                <div className="mt-4 w-full pt-4 border-t border-white/10 flex flex-col gap-1 text-xs font-sans">
+                  <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Tap to view</span>
+                  <span className="text-gray-300">{theme.contact}</span>
+                </div>
               </div>
             </motion.div>
           ))}

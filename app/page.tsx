@@ -65,8 +65,8 @@ export default function Home() {
             <h4 className="font-pixel text-gray-200 mb-4 text-xs tracking-widest">
               CONTACT & SUPPORT
             </h4>
-            <p>Phone: +91 7498 843 775</p>
-            <p>Phone: +91 721 946 1301</p>
+            <p>Phone: +91 91308 17727</p>
+            <p>Phone: +91 755 845 4108</p>
             <p>Email: dssa.dkte24@gmail.com</p>
           </div>
           <div>
